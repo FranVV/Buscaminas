@@ -5,6 +5,8 @@
  */
 package buscaminasgitghub;
 
+import Clases.Tablero;
+
 /**
  *
  * @author alumno
@@ -15,7 +17,10 @@ public class BuscaminasGitGhub {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Tablero t = new Tablero(3, 3);
+        t.insertarMinas(3);
+        System.out.println(t.calcularNumeroMinasCasilla(0, 0));
+        t.imprimirPrueba();
     }
     
 }
