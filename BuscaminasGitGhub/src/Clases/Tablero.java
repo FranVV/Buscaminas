@@ -80,13 +80,20 @@ public class Tablero {
         }
         System.out.println(" ");
     }
-    public Casilla getcasilla(int fila, int columna) {
+    public Casilla getCasilla(int fila, int columna) {
         Casilla desCasilla = new Casilla();
         if(mTabla[fila][columna].isBlanca()){
-            //mTabla[fila][columna]=new;
+            desCasilla.setBlanca(true);
         }
-        
-        
+        if(mTabla[fila][columna].isBandera()){
+            desCasilla.setBandera(true);
+        }
+        if(mTabla[fila][columna].isMina()){
+            desCasilla.setMina(true);
+        }
+        if(mTabla[fila][columna].isVisible()){
+            desCasilla.setVisible(true);
+        }
         return desCasilla;
     }
 
