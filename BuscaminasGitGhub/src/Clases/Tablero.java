@@ -35,11 +35,17 @@ public class Tablero {
         this.numColumnas = numColumnas;
         this.numMinas = numMinas;
         this.mTabla = new Casilla[numFilas][numColumnas];
+        for (int i = 0; i < mTabla.length; i++) {
+            for (int j = 0; j < mTabla[i].length; j++) {
+                mTabla[i][j]=new Casilla();
+            }
+        }
     }
 
     public void insertarMinas(int minas) {
         Random f = new Random();
         int fila, col;
+        numMinas=minas;
         while (minas > 0) {
             fila = f.nextInt(numFilas);
             col = f.nextInt(numColumnas);
@@ -55,14 +61,8 @@ public class Tablero {
         imprimirLineas();
         for (int i = 0; i < numFilas; i++) {
             System.out.print(i);
-
             for (int j = 0; j < numColumnas; j++) {
-                if (mTabla[i][j].isMina()){
-                    System.out.print(" M ");
-                }else{
-                    System.out.print(" . ");
-                }
-                
+                    System.out.print(" . ");   
             }
             System.out.print(i);
             System.out.println("");
@@ -81,20 +81,16 @@ public class Tablero {
         System.out.println(" ");
     }
     public Casilla getCasilla(int fila, int columna) {
-        Casilla desCasilla = new Casilla();
-        if(mTabla[fila][columna].isBlanca()){
-            desCasilla.setBlanca(true);
+        return mTabla[fila][columna];
+    }
+    public void calcularTablero() {
+        for (int i = 0; i < numFilas; i++) {
+            for (int j = 0; j < numColumnas; j++) {
+                if(!mTabla[i][j].isMina()){
+                    mTabla[i][j].setNumero(calcularNumeroMinasCasilla(i, j));
+                }
+            }
         }
-        if(mTabla[fila][columna].isBandera()){
-            desCasilla.setBandera(true);
-        }
-        if(mTabla[fila][columna].isMina()){
-            desCasilla.setMina(true);
-        }
-        if(mTabla[fila][columna].isVisible()){
-            desCasilla.setVisible(true);
-        }
-        return desCasilla;
     }
 
     public int calcularNumeroMinasCasilla(int fila, int columna) {
