@@ -18,7 +18,7 @@ public class Casilla {
 
     public Casilla() {
         mina= false;
-        blanca=false;
+        blanca=true;
         bandera=false;
         visible=false;
         numero=0;

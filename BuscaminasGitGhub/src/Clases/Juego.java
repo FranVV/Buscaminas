@@ -12,6 +12,7 @@ import java.util.Scanner;
  * @author alumno
  */
 public class Juego {
+
     private Tablero tablero;
     private int numMinas;
     private int numFilas;
@@ -24,16 +25,15 @@ public class Juego {
         this.numColumnas = 0;
     }
 
-    public Juego( int numMinas, int numFilas, int numColumnas) {
+    public Juego(int numMinas, int numFilas, int numColumnas) {
         this.tablero = new Tablero(numFilas, numColumnas, numMinas);
         this.numMinas = numMinas;
         this.numFilas = numFilas;
         this.numColumnas = numColumnas;
     }
 
-    
-    public  void configurarJuego() {
-      Scanner leer = new Scanner(System.in);
+    public void configurarJuego() {
+        Scanner leer = new Scanner(System.in);
         System.out.println("Dime el numero de Minas");
         numMinas = leer.nextInt();
         System.out.println("Dime el numero de Filas");
@@ -41,55 +41,109 @@ public class Juego {
         System.out.println("Dime el numero de Columnas");
         numColumnas = leer.nextInt();
     }
-    public  void iniciarJuego() {
-      tablero= new Tablero(numFilas, numColumnas);
-      tablero.insertarMinas(numMinas);
+
+    public void iniciarJuego() {
+        tablero = new Tablero(numFilas, numColumnas);
+        tablero.insertarMinas(numMinas);
     }
-    public  void juegar() {
-      Scanner leer = new Scanner(System.in);
-        int f,c;
-        boolean bandera= true;
+
+    public void juegar() {
+        Scanner leer = new Scanner(System.in);
+        int f, c;
+        boolean bandera = true;
+        tablero.imprimirSolucion();
         mostrarTablero();
-        while (bandera) {  
-            switch(elegirOpcion()){
+        while (bandera) {
+            
+            switch (elegirOpcion()) {
                 case 1://Descubrir
                     System.out.println("Dime la Fila");
-                    f=leer.nextInt();
+                    f = leer.nextInt();
                     System.out.println("Dime la Columna");
-                    c=leer.nextInt();
-                 break;
-                 case 2://Poner bandera
-                     System.out.println("Dime la Fila");
-                    f=leer.nextInt();
+                    c = leer.nextInt();
+                    if(cordenadasCorectas(f, c) && descubrirCasilla(f, c)){
+                       mostrarTablero();
+                    }
+                    break;
+                case 2://Poner bandera
+                    System.out.println("Dime la Fila");
+                    f = leer.nextInt();
                     System.out.println("Dime la Columna");
-                    c=leer.nextInt();
-                 break;
-                 case 3://Quitar bandera
-                     System.out.println("Dime la Fila");
-                    f=leer.nextInt();
+                    c = leer.nextInt();
+                    break;
+                case 3://Quitar bandera
+                    System.out.println("Dime la Fila");
+                    f = leer.nextInt();
                     System.out.println("Dime la Columna");
-                    c=leer.nextInt();
-                 break;
-                 case 4://Salir
-                     System.out.println("Has salido del programa");
-                     bandera= false;
-                 break;
+                    c = leer.nextInt();
+                    break;
+                case 4://Salir
+                    System.out.println("Has salido del programa");
+                    bandera = false;
+                    break;
             }
         }
-        
+
     }
-    private  void mostrarTablero() {
-     tablero.imprimirPrueba();
+
+    private void mostrarTablero() {
+        tablero.imprimirPrueba();
     }
+
     private boolean cordenadasCorectas(int fila, int columna) {
-        if(fila<0 && fila>numFilas && columna<0 && columna>numColumnas && tablero.getCasilla(fila, columna)){
-        return false;
+        if (fila < 0 && fila > numFilas && columna < 0 && columna > numColumnas && tablero.getCasilla(fila, columna).isVisible()) {
+            return false;
         }
-     return true;
+        return true;
     }
-     private int elegirOpcion() {
-        int menu=0;
-        if(menu>=0&&menu<5){
+
+    private void acabarJuegoMina() {
+        System.out.println("Juego Finalizado has pisado una mina");
+        tablero.imprimirSolucion();
+    }
+
+    private boolean descubrirCasilla(int fila, int columna) {
+        if (!tablero.getCasilla(fila, columna).isMina()) {
+            tablero.getCasilla(fila, columna).setVisible(true);
+            return true;
+        } else {
+            acabarJuegoMina();
+            return false;
+        }
+    }
+
+    //terminar
+    private void descubrirBanco(int fila, int columna) {
+        if (!tablero.getCasilla(fila, columna).isMina()) {
+            tablero.getCasilla(fila, columna).setVisible(true);
+
+        } else {
+            acabarJuegoMina();
+
+        }
+    }
+
+    private boolean partidaGanada(int fila, int columna) {
+        int contador = 0;
+        for (int i = 0; i < numFilas; i++) {
+            for (int j = 0; j < numColumnas; j++) {
+                if (tablero.getCasilla(fila, columna).isMina() == tablero.getCasilla(fila, columna).isBandera() && contador < numMinas) {
+                    contador++;
+                }
+            }
+        }
+        if(contador==numMinas){
+            return true;
+        }else{
+            return false;
+        }
+        
+
+    }
+
+    private int elegirOpcion() {
+        int menu = 0;
+        if (menu >= 0 && menu < 5) {
             Scanner leer = new Scanner(System.in);
             System.out.println("***************************");
             System.out.println("Elija el tipo de operacion");
@@ -98,11 +152,11 @@ public class Juego {
             System.out.println("3-Quitar Bandera");
             System.out.println("4-Salir");
             System.out.println("***************************");
-            menu=leer.nextInt();
+            menu = leer.nextInt();
         }
-      return menu;
+        return menu;
     }
-    
+
     @Override
     public String toString() {
         return "Juego{" + "tablero=" + getTablero() + ", numMinas=" + getNumMinas() + ", numFilas=" + getNumFilas() + ", numColumnas=" + getNumColumnas() + '}';
@@ -163,6 +217,5 @@ public class Juego {
     public void setNumColumnas(int numColumnas) {
         this.numColumnas = numColumnas;
     }
-    
-    
+
 }

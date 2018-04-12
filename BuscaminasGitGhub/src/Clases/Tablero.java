@@ -62,7 +62,41 @@ public class Tablero {
         for (int i = 0; i < numFilas; i++) {
             System.out.print(i);
             for (int j = 0; j < numColumnas; j++) {
-                    System.out.print(" . ");   
+                if (!mTabla[i][j].isVisible()) {
+                    System.out.print(" . ");
+                }else{
+                    if(mTabla[i][j].isMina()){
+                        System.out.print(" M ");
+                    }
+                    if(mTabla[i][j].isBandera()){
+                        System.out.print(" B ");
+                    }
+                    if(mTabla[i][j].isBlanca()){
+                        System.out.print("   ");
+                    }
+                        
+                    if (mTabla[i][j].getNumero()>0){
+                        System.out.print(" " + mTabla[i][j].getNumero() + " ");
+                    }
+                    
+                }
+            }
+            System.out.print(i);
+            System.out.println("");
+            
+        }
+        imprimirLineas();
+    }
+    public void imprimirSolucion() {
+        imprimirLineas();
+        for (int i = 0; i < numFilas; i++) {
+            System.out.print(i);
+            for (int j = 0; j < numColumnas; j++) {
+                    if(mTabla[i][j].isMina()){
+                        System.out.print(" M ");
+                    }else{
+                        System.out.print(" " + mTabla[i][j].getNumero() + " ");
+                    }   
             }
             System.out.print(i);
             System.out.println("");
@@ -84,10 +118,14 @@ public class Tablero {
         return mTabla[fila][columna];
     }
     public void calcularTablero() {
+        int num = 0;
         for (int i = 0; i < numFilas; i++) {
             for (int j = 0; j < numColumnas; j++) {
                 if(!mTabla[i][j].isMina()){
-                    mTabla[i][j].setNumero(calcularNumeroMinasCasilla(i, j));
+                    num = calcularNumeroMinasCasilla(i, j);
+                    mTabla[i][j].setNumero(num);
+                    if (num>0)
+                         mTabla[i][j].setBlanca(false);
                 }
             }
         }
