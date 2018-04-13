@@ -45,6 +45,7 @@ public class Juego {
     public void iniciarJuego() {
         tablero = new Tablero(numFilas, numColumnas);
         tablero.insertarMinas(numMinas);
+        tablero.calcularTablero();
     }
 
     public void juegar() {
@@ -62,7 +63,8 @@ public class Juego {
                     System.out.println("Dime la Columna");
                     c = leer.nextInt();
                     if(cordenadasCorectas(f, c) && descubrirCasilla(f, c)){
-                       mostrarTablero();
+                        descubrirBanco(f, c);
+                        mostrarTablero();
                     }
                     break;
                 case 2://Poner bandera
@@ -70,6 +72,9 @@ public class Juego {
                     f = leer.nextInt();
                     System.out.println("Dime la Columna");
                     c = leer.nextInt();
+                    if(cordenadasCorectas(f, c) && ponerBandera(f, c) && partidaGanada(f, c)){
+                       mostrarTablero();
+                    }
                     break;
                 case 3://Quitar bandera
                     System.out.println("Dime la Fila");
@@ -91,10 +96,12 @@ public class Juego {
     }
 
     private boolean cordenadasCorectas(int fila, int columna) {
-        if (fila < 0 && fila > numFilas && columna < 0 && columna > numColumnas && tablero.getCasilla(fila, columna).isVisible()) {
+        if (fila >= 0 && fila < numFilas && columna >= 0 && columna < numColumnas && !tablero.getCasilla(fila, columna).isVisible()) {
+            return true;
+        }else{
             return false;
         }
-        return true;
+        
     }
 
     private void acabarJuegoMina() {
@@ -111,16 +118,27 @@ public class Juego {
             return false;
         }
     }
+    
+    private boolean ponerBandera(int fila, int columna) {
+        if (!tablero.getCasilla(fila, columna).isBandera()) {
+            tablero.getCasilla(fila, columna).setBandera(true);
+            return true;
+        } 
+            return false;
+        
+    }
 
     //terminar
     private void descubrirBanco(int fila, int columna) {
-        if (!tablero.getCasilla(fila, columna).isMina()) {
-            tablero.getCasilla(fila, columna).setVisible(true);
-
-        } else {
-            acabarJuegoMina();
-
+        for (int i = fila-1; i <=fila+1; i++) {
+            for (int j = columna-1; j <=columna+1; j++) {
+                if (cordenadasCorectas(i, j)&& tablero.getCasilla(fila,columna).isBlanca()&&tablero.getCasilla(i,j).isBlanca()) {
+                    tablero.getCasilla(i, j).setVisible(true);
+                    descubrirBanco(i, j);
+                }
+            }
         }
+        
     }
 
     private boolean partidaGanada(int fila, int columna) {

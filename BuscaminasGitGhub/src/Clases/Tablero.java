@@ -67,18 +67,17 @@ public class Tablero {
                 }else{
                     if(mTabla[i][j].isMina()){
                         System.out.print(" M ");
-                    }
-                    if(mTabla[i][j].isBandera()){
+                    }else{if(mTabla[i][j].isBandera()){
                         System.out.print(" B ");
-                    }
-                    if(mTabla[i][j].isBlanca()){
+                    }else{if(mTabla[i][j].isBlanca() && calcularNumeroMinasCasilla(i, j)<=0 ){
                         System.out.print("   ");
+                    }else{
+                        System.out.print(" " + calcularNumeroMinasCasilla(i, j)+ " ");
                     }
-                        
-                    if (mTabla[i][j].getNumero()>0){
-                        System.out.print(" " + mTabla[i][j].getNumero() + " ");
                     }
-                    
+                    }
+                   
+
                 }
             }
             System.out.print(i);
@@ -95,7 +94,7 @@ public class Tablero {
                     if(mTabla[i][j].isMina()){
                         System.out.print(" M ");
                     }else{
-                        System.out.print(" " + mTabla[i][j].getNumero() + " ");
+                        System.out.print(" " + calcularNumeroMinasCasilla(i, j)+ " ");
                     }   
             }
             System.out.print(i);
