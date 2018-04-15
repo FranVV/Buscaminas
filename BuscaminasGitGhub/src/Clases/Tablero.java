@@ -25,7 +25,7 @@ public class Tablero {
         this.mTabla = new Casilla[numFilas][numColumnas];
         for (int i = 0; i < mTabla.length; i++) {
             for (int j = 0; j < mTabla[i].length; j++) {
-                mTabla[i][j]=new Casilla();
+                mTabla[i][j] = new Casilla();
             }
         }
     }
@@ -37,7 +37,7 @@ public class Tablero {
         this.mTabla = new Casilla[numFilas][numColumnas];
         for (int i = 0; i < mTabla.length; i++) {
             for (int j = 0; j < mTabla[i].length; j++) {
-                mTabla[i][j]=new Casilla();
+                mTabla[i][j] = new Casilla();
             }
         }
     }
@@ -45,7 +45,7 @@ public class Tablero {
     public void insertarMinas(int minas) {
         Random f = new Random();
         int fila, col;
-        numMinas=minas;
+        numMinas = minas;
         while (minas > 0) {
             fila = f.nextInt(numFilas);
             col = f.nextInt(numColumnas);
@@ -64,38 +64,38 @@ public class Tablero {
             for (int j = 0; j < numColumnas; j++) {
                 if (!mTabla[i][j].isVisible()) {
                     System.out.print(" . ");
-                }else{
-                    if(mTabla[i][j].isMina()){
+                } else {
+                    if (mTabla[i][j].isMina()) {
                         System.out.print(" M ");
-                    }else{if(mTabla[i][j].isBandera()){
+                    }
+                    if (mTabla[i][j].isBandera()) {
                         System.out.print(" B ");
-                    }else{if(mTabla[i][j].isBlanca() && calcularNumeroMinasCasilla(i, j)<=0 ){
-                        System.out.print("   ");
-                    }else{
-                        System.out.print(" " + calcularNumeroMinasCasilla(i, j)+ " ");
+                    } else {
+                        if (mTabla[i][j].isBlanca() && calcularNumeroMinasCasilla(i, j) <= 0) {
+                            System.out.print("   ");
+                        } else {
+                            System.out.print(" " + calcularNumeroMinasCasilla(i, j) + " ");
+                        }
                     }
-                    }
-                    }
-                   
-
                 }
             }
             System.out.print(i);
             System.out.println("");
-            
+
         }
         imprimirLineas();
     }
+
     public void imprimirSolucion() {
         imprimirLineas();
         for (int i = 0; i < numFilas; i++) {
             System.out.print(i);
             for (int j = 0; j < numColumnas; j++) {
-                    if(mTabla[i][j].isMina()){
-                        System.out.print(" M ");
-                    }else{
-                        System.out.print(" " + calcularNumeroMinasCasilla(i, j)+ " ");
-                    }   
+                if (mTabla[i][j].isMina()) {
+                    System.out.print(" M ");
+                } else {
+                    System.out.print(" " + calcularNumeroMinasCasilla(i, j) + " ");
+                }
             }
             System.out.print(i);
             System.out.println("");
@@ -113,18 +113,21 @@ public class Tablero {
         }
         System.out.println(" ");
     }
+
     public Casilla getCasilla(int fila, int columna) {
         return mTabla[fila][columna];
     }
+
     public void calcularTablero() {
         int num = 0;
         for (int i = 0; i < numFilas; i++) {
             for (int j = 0; j < numColumnas; j++) {
-                if(!mTabla[i][j].isMina()){
+                if (!mTabla[i][j].isMina()) {
                     num = calcularNumeroMinasCasilla(i, j);
                     mTabla[i][j].setNumero(num);
-                    if (num>0)
-                         mTabla[i][j].setBlanca(false);
+                    if (num > 0) {
+                        mTabla[i][j].setBlanca(false);
+                    }
                 }
             }
         }
@@ -134,7 +137,7 @@ public class Tablero {
         int n = 0;
         for (int i = fila - 1; i <= fila + 1; i++) {
             for (int j = columna - 1; j <= columna + 1; j++) {
-                if (i>=0 && i<numFilas && j>=0 && j<numColumnas) {
+                if (i >= 0 && i < numFilas && j >= 0 && j < numColumnas) {
                     if (mTabla[i][j].isMina()) {
                         n++;
                     }

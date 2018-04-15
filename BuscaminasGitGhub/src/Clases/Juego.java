@@ -55,38 +55,38 @@ public class Juego {
         tablero.imprimirSolucion();
         mostrarTablero();
         while (bandera) {
-            
+            System.out.println("Dime la Fila");
+            f = leer.nextInt();
+            System.out.println("Dime la Columna");
+            c = leer.nextInt();
             switch (elegirOpcion()) {
                 case 1://Descubrir
-                    System.out.println("Dime la Fila");
-                    f = leer.nextInt();
-                    System.out.println("Dime la Columna");
-                    c = leer.nextInt();
+                    
                     if(cordenadasCorectas(f, c) && descubrirCasilla(f, c)){
                         descubrirBanco(f, c);
                         mostrarTablero();
                     }
+                    
                     break;
                 case 2://Poner bandera
-                    System.out.println("Dime la Fila");
-                    f = leer.nextInt();
-                    System.out.println("Dime la Columna");
-                    c = leer.nextInt();
-                    if(cordenadasCorectas(f, c) && ponerBandera(f, c) && partidaGanada(f, c)){
+                    if(cordenadasCorectas(f, c)){
+                       ponerBandera(f, c);
                        mostrarTablero();
                     }
                     break;
                 case 3://Quitar bandera
-                    System.out.println("Dime la Fila");
-                    f = leer.nextInt();
-                    System.out.println("Dime la Columna");
-                    c = leer.nextInt();
+                    tablero.getCasilla(f, c).setVisible(false);
+                     if(cordenadasCorectas(f, c)){
+                       quitarBandera(f, c);
+                       mostrarTablero();
+                    }
                     break;
                 case 4://Salir
                     System.out.println("Has salido del programa");
                     bandera = false;
                     break;
             }
+            
         }
 
     }
@@ -121,14 +121,23 @@ public class Juego {
     
     private boolean ponerBandera(int fila, int columna) {
         if (!tablero.getCasilla(fila, columna).isBandera()) {
+            tablero.getCasilla(fila, columna).setVisible(true);
             tablero.getCasilla(fila, columna).setBandera(true);
             return true;
         } 
             return false;
         
     }
+    private boolean quitarBandera(int fila, int columna) {
+        if (tablero.getCasilla(fila, columna).isBandera()) {
+            tablero.getCasilla(fila, columna).setBandera(false);
+            return true;
+        } 
+            return false;
+        
+    }
 
-    //terminar
+   
     private void descubrirBanco(int fila, int columna) {
         for (int i = fila-1; i <=fila+1; i++) {
             for (int j = columna-1; j <=columna+1; j++) {
@@ -140,12 +149,12 @@ public class Juego {
         }
         
     }
-
+//repasar
     private boolean partidaGanada(int fila, int columna) {
         int contador = 0;
         for (int i = 0; i < numFilas; i++) {
             for (int j = 0; j < numColumnas; j++) {
-                if (tablero.getCasilla(fila, columna).isMina() == tablero.getCasilla(fila, columna).isBandera() && contador < numMinas) {
+                if (contador < numMinas && tablero.getCasilla(i, j).isMina() == tablero.getCasilla(i, j).isBandera()) {
                     contador++;
                 }
             }
