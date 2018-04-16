@@ -72,6 +72,7 @@ public class Juego {
                     if(cordenadasCorectas(f, c)){
                        ponerBandera(f, c);
                        mostrarTablero();
+                       bandera = !partidaGanada();
                     }
                     break;
                 case 3://Quitar bandera
@@ -79,6 +80,7 @@ public class Juego {
                      if(cordenadasCorectas(f, c)){
                        quitarBandera(f, c);
                        mostrarTablero();
+                       bandera = !partidaGanada();
                     }
                     break;
                 case 4://Salir
@@ -150,15 +152,24 @@ public class Juego {
         
     }
 //repasar
-    private boolean partidaGanada(int fila, int columna) {
+    private boolean partidaGanada() {
         int contador = 0;
+        
+         for (int i = 0; i < numFilas; i++) {
+            for (int j = 0; j < numColumnas; j++) {
+                if (!(tablero.getCasilla(i, j).isBandera() == tablero.getCasilla(i, j).isMina())) {
+                    return false;
+                }
+            }
+        }
         for (int i = 0; i < numFilas; i++) {
             for (int j = 0; j < numColumnas; j++) {
-                if (contador < numMinas && tablero.getCasilla(i, j).isMina() == tablero.getCasilla(i, j).isBandera()) {
+                if (tablero.getCasilla(i, j).isMina() &&  tablero.getCasilla(i, j).isBandera()) {
                     contador++;
                 }
             }
         }
+        
         if(contador==numMinas){
             return true;
         }else{
